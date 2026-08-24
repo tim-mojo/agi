@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGI — Learning Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --container: 1264px;
+
+    --bg: #000000;
+    --bg-alt: #0a0a0a;
+    --surface: #121212;
+    --surface-2: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+
+    --text: #f2f2f4;
+    --text-muted: #a1a1a8;
+    --text-faint: #6f6f78;
+
+    --purple: #7a00c6;
+    --purple-soft: rgba(122,0,198,0.16);
+    --orange: #f97316;
+    --orange-soft: rgba(249,115,22,0.16);
+    --yellow: #f9d67a;
+    --sage: #a2cca8;
+    --cyan: #23ced8;
+    --teal: #097c87;
+
+    --gradient-main: linear-gradient(90deg, #7a00c6 0%, #f97316 100%);
+    --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  p { margin: 0; }
+
+  ::selection { background: var(--purple); color: #fff; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    .hero-glow { animation: none !important; }
+    .cta-band::before, .cta-band::after { animation: none !important; }
+    .hero-badge, .hero h1, .hero-sub, .hero-actions { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+  }
+
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroBlurIn {
+    from { opacity: 0; filter: blur(14px); }
+    to   { opacity: 1; filter: blur(0px); }
+  }
+  .hero-badge { animation: heroFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+  .hero h1 { animation: heroBlurIn 2.4s cubic-bezier(0.16,1,0.3,1) 0.14s both; }
+  .hero-sub { animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+  .hero-actions { animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  @media (max-width: 640px) {
+    .container { padding: 0 20px; }
+  }
+
+  /* ---------- type helpers ---------- */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+  }
+  .section-heading {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+    max-width: 640px;
+  }
+  .section-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0;
+  }
+  .section-head {
+    margin-bottom: 48px;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 13px 26px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 12px 30px -10px rgba(122,0,198,0.55);
+  }
+  .btn-primary:hover { background: #8f0de0; box-shadow: 0 16px 36px -8px rgba(122,0,198,0.6); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); }
+  .btn-light {
+    background: #fff;
+    color: #000000;
+  }
+  .btn-light:hover { box-shadow: 0 14px 34px -10px rgba(0,0,0,0.4); }
+  .btn-sm { padding: 9px 18px; font-size: 0.82rem; }
+
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .link-arrow svg { width: 15px; height: 15px; transition: transform 0.15s ease; }
+  .link-arrow:hover svg { transform: translateX(3px); }
+
+  /* ---------- nav ---------- */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    gap: 24px;
+    max-width: none;
+    padding: 0 40px;
+  }
+  @media (max-width: 640px) {
+    .navbar .container { padding: 0 20px; }
+  }
+  .navbar .logo img { height: 38px; width: auto; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .nav-links a { transition: color 0.15s ease; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+  .nav-item { position: relative; }
+  .nav-item > a { display: inline-flex; align-items: center; gap: 4px; }
+  .nav-caret { width: 11px; height: 11px; flex: none; transition: transform 0.15s ease; }
+  .nav-item:hover .nav-caret, .nav-item:focus-within .nav-caret { transform: rotate(180deg); }
+  .nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 8px;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform-origin: top center;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+  }
+  .nav-dropdown a {
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .nav-dropdown a:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+  .nav-item:hover .nav-dropdown, .nav-item:focus-within .nav-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-dropdown, .nav-caret { transition: none !important; }
+  }
+  .nav-right { display: flex; align-items: center; gap: 18px; flex: none; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---------- section rhythm ---------- */
+  .section { padding: 108px 0; position: relative; }
+  .section.alt { background: var(--bg-alt); }
+  @media (max-width: 640px) {
+    .section { padding: 72px 0; }
+  }
+
+  /* ---------- hub hero ---------- */
+  .hero {
+    padding: 200px 0 100px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: url('Images/Grid-1.svg');
+    background-size: 180%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 30%, black 0%, transparent 75%);
+    mask-image: radial-gradient(ellipse 60% 55% at 50% 30%, black 0%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -220px; left: 0; right: 0;
+    width: 100%; height: 760px;
+    background:
+      radial-gradient(circle at 18% 40%, rgba(122,0,198,0.58), transparent 62%),
+      radial-gradient(circle at 84% 45%, rgba(249,115,22,0.48), transparent 56%);
+    -webkit-mask-image: radial-gradient(ellipse 65% 58% at 50% 38%, black 0%, black 38%, transparent 88%);
+    mask-image: radial-gradient(ellipse 65% 58% at 50% 38%, black 0%, black 38%, transparent 88%);
+    filter: blur(24px);
+    pointer-events: none;
+    animation: heroGlowDrift 9s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes heroGlowDrift {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.65; }
+    25%  { transform: translate3d(9%, -11%, 0) scale(1.32) rotate(5deg); opacity: 1; }
+    50%  { transform: translate3d(-8%, 4%, 0) scale(1.08) rotate(-4deg); opacity: 0.8; }
+    75%  { transform: translate3d(7%, 9%, 0) scale(1.38) rotate(4deg); opacity: 1; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.65; }
+  }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-strong);
+    padding: 7px 16px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gradient-main); }
+  .hero h1 {
+    font-size: clamp(2.6rem, 6vw, 4.4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    margin: 0 auto 26px;
+    text-wrap: balance;
+  }
+  .hero-sub {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto 40px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- resources header + filters ---------- */
+  .resources-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter-pill {
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .filter-pill:hover { color: var(--text); border-color: rgba(255,255,255,0.3); }
+  .filter-pill.active { color: #fff; background: var(--purple); border-color: var(--purple); }
+  @media (max-width: 700px) {
+    .resources-head { align-items: flex-start; }
+  }
+
+  /* ---------- resource cards (Learning Hub grid) ---------- */
+  #resources { padding-top: 80px; padding-bottom: 160px; }
+  @media (max-width: 640px) {
+    #resources { padding-top: 56px; padding-bottom: 100px; }
+  }
+  .lh-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 8px; }
+  .lh-card.is-hidden { display: none; }
+  @media (max-width: 860px) { .lh-grid { grid-template-columns: 1fr; } }
+  .lh-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .lh-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .lh-visual {
+    height: 150px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .lh-visual.v1 { background: radial-gradient(circle at 30% 30%, rgba(122,0,198,0.35), transparent 70%), var(--surface-2); }
+  .lh-visual.v2 { background: radial-gradient(circle at 70% 30%, rgba(249,115,22,0.32), transparent 70%), var(--surface-2); }
+  .lh-visual.v3 { background: radial-gradient(circle at 50% 70%, rgba(35,206,216,0.28), transparent 70%), var(--surface-2); }
+  .lh-visual svg { width: 34px; height: 34px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
+  .lh-body { padding: 22px; }
+  .lh-meta {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+  }
+  .lh-body p { font-size: 0.94rem; line-height: 1.6; color: var(--text-muted); margin: 0; }
+
+  /* ---------- CTA band ---------- */
+  .cta-band {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    background: linear-gradient(150deg, #1f0834 0%, #090309 38%, #000000 58%, #12070a 76%, #2f1006 100%);
+  }
+  .cta-band::before,
+  .cta-band::after {
+    content: "";
+    position: absolute; inset: -25%;
+    pointer-events: none;
+    filter: blur(36px);
+  }
+  .cta-band::before {
+    background: radial-gradient(circle at 22% 25%, rgba(122,0,198,0.68), transparent 56%),
+                radial-gradient(circle at 60% 8%, rgba(0,0,0,0.7), transparent 46%),
+                radial-gradient(circle at 82% 70%, rgba(249,115,22,0.42), transparent 52%);
+    animation: meshDriftA 10s ease-in-out infinite;
+    transform-origin: 30% 30%;
+  }
+  .cta-band::after {
+    background: radial-gradient(circle at 78% 78%, rgba(249,115,22,0.55), transparent 55%),
+                radial-gradient(circle at 30% 92%, rgba(0,0,0,0.65), transparent 48%),
+                radial-gradient(circle at 12% 45%, rgba(122,0,198,0.35), transparent 50%);
+    animation: meshDriftB 14s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+  @keyframes meshDriftA {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.8; }
+    33%  { transform: translate3d(10%, -9%, 0) scale(1.3) rotate(8deg); opacity: 1; }
+    66%  { transform: translate3d(-8%, 7%, 0) scale(0.92) rotate(-6deg); opacity: 0.85; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.8; }
+  }
+  @keyframes meshDriftB {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.85; }
+    40%  { transform: translate3d(-9%, 9%, 0) scale(1.28) rotate(-7deg); opacity: 1; }
+    70%  { transform: translate3d(9%, -6%, 0) scale(1.05) rotate(5deg); opacity: 0.9; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.85; }
+  }
+  .cta-band .container { position: relative; z-index: 1; }
+  .cta-band h2 {
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    max-width: 620px;
+    margin-left: auto; margin-right: auto;
+    text-wrap: balance;
+  }
+  .cta-band p {
+    font-size: 1.05rem;
+    color: rgba(245,242,249,0.75);
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  /* ---------- footer ---------- */
+  footer {
+    padding: 72px 0 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 32px;
+    padding-bottom: 48px;
+  }
+  @media (max-width: 860px) {
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .footer-top { grid-template-columns: 1fr; }
+  }
+  .footer-brand img { height: 32px; margin-bottom: 16px; }
+  .footer-brand p { font-size: 0.88rem; color: var(--text-faint); max-width: 240px; line-height: 1.6; }
+  .footer-social {
+    display: inline-flex;
+    margin-top: 18px;
+  }
+  .footer-social img {
+    width: 22px;
+    height: 22px;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+  }
+  .footer-social:hover img { opacity: 1; }
+  .footer-col-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .footer-col p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 13px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 13px;
+    transition: color 0.15s ease;
+  }
+  .footer-col a:hover { color: var(--cyan); }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-faint);
+  }
+  .footer-legal { display: flex; gap: 22px; }
+  .footer-legal a { color: var(--text-muted); }
+  .footer-legal a:hover { color: var(--text); }
+  .footer-powered {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-faint);
+  }
+  .footer-powered span { position: relative; top: -1px; }
+  .footer-powered img { height: 16px; width: auto; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="logo" href="agi-homepage.html"><img src="Images/AGI-Logo-1.svg" alt="AGI"></a>
+    <div class="nav-links">
+      <a href="agi-homepage.html">Home</a>
+      <div class="nav-item">
+      <a href="agi-technology.html">Technology <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-technology-overview.html">Technology Overview</a>
+      <a href="agi-lcm.html">Language Compiler Model</a>
+      </div>
+    </div>
+      <div class="nav-item">
+      <a href="agi-products.html">Products <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-producta.html">Product A</a>
+      <a href="agi-productb.html">Product B</a>
+      </div>
+    </div>
+      <a href="agi-industries.html">Industries</a>
+      <a href="agi-agilabs.html">AGI Labs</a>
+      <a href="agi-learninghub.html" class="active">Learning Hub</a>
+      <div class="nav-item">
+      <a href="agi-company.html">Company <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-aboutus.html">About Us</a>
+      <a href="agi-careers.html">Careers</a>
+      <a href="agi-leadership.html">Leadership</a>
+      </div>
+    </div>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-primary btn-sm" href="agi-bookademo.html">Contact Us</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Learning Hub</div>
+    <h1>Go deeper on coherence-first AI</h1>
+    <p class="hero-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="agi-bookademo.html">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- Resources -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="resources-head">
+      <div class="section-head" style="margin-bottom:0;">
+        <div class="eyebrow">Resources</div>
+        <h2 class="section-heading" style="margin-bottom:0;">Resources</h2>
+      </div>
+      <div class="filter-row">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="ai-fundamentals">AI Fundamentals</button>
+        <button class="filter-pill" data-filter="knowledge-intelligence">Knowledge Intelligence</button>
+        <button class="filter-pill" data-filter="enterprise-ai">Enterprise AI</button>
+        <button class="filter-pill" data-filter="product-updates">Product Updates</button>
+      </div>
+    </div>
+
+    <div class="lh-grid">
+      <a class="lh-card" href="agi-newsarticle.html" data-category="knowledge-intelligence">
+        <div class="lh-visual v1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Downloads</div>
+          <p>Lorem ipsum dolor sit amet consectetur.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="knowledge-intelligence">
+        <div class="lh-visual v2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Whitepapers</div>
+          <p>Consectetur adipiscing elit sed do.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="enterprise-ai">
+        <div class="lh-visual v3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6a8 3 0 0 0 16 0M4 6v12a8 3 0 0 0 16 0V6M4 12a8 3 0 0 0 16 0" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Case Studies</div>
+          <p>Eiusmod tempor incididunt ut labore.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="enterprise-ai">
+        <div class="lh-visual v1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4M9 12h6M9 16h6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Technical Documentation</div>
+          <p>Ut labore et dolore magna aliqua.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="ai-fundamentals">
+        <div class="lh-visual v2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Videos</div>
+          <p>Ut enim ad minim veniam quis.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="product-updates">
+        <div class="lh-visual v3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8.5v3.2M12 15.2h.01" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">FAQs</div>
+          <p>Nostrud exercitation ullamco laboris.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="ai-fundamentals">
+        <div class="lh-visual v1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Webinars</div>
+          <p>Dolor sit amet consectetur adipiscing.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="ai-fundamentals">
+        <div class="lh-visual v2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v13m0 0l-4-4m4 4l4-4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Tutorials</div>
+          <p>Elit sed do eiusmod tempor incididunt.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="knowledge-intelligence">
+        <div class="lh-visual v3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 5.5v15"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Research Papers</div>
+          <p>Ut labore et dolore magna aliqua ut enim.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="enterprise-ai">
+        <div class="lh-visual v1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6a8 3 0 0 0 16 0M4 6v12a8 3 0 0 0 16 0V6M4 12a8 3 0 0 0 16 0" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Customer Stories</div>
+          <p>Ad minim veniam quis nostrud exercitation.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="product-updates">
+        <div class="lh-visual v2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3v4M12 17v4M4.2 6.2l2.8 2.8M17 15l2.8 2.8M3 12h4M17 12h4M4.2 17.8L7 15M17 9l2.8-2.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Release Notes</div>
+          <p>Ullamco laboris nisi ut aliquip ex ea.</p>
+        </div>
+      </a>
+      <a class="lh-card" href="agi-newsarticle.html" data-category="enterprise-ai">
+        <div class="lh-visual v3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M8 7h.01M8 17h.01" stroke-linecap="round"/></svg>
+        </div>
+        <div class="lh-body">
+          <div class="lh-meta">Best Practices</div>
+          <p>Commodo consequat duis aute irure dolor.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Us CTA -->
+<section class="section cta-band">
+  <div class="container">
+    <h2>Ready to build on coherence?</h2>
+    <p>Talk to our team about bringing CoherenceFirst Intelligence to your organization.</p>
+    <a class="btn btn-light" href="agi-bookademo.html">Contact Us</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="Images/AGI-Logo-1.svg" alt="AGI">
+        <p>Coherence-first intelligence for the AI economy.</p>
+        <a class="footer-social" href="#" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <img src="Images/LinkedIn-Icon.png" alt="LinkedIn">
+        </a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Products</div>
+        <a href="agi-producta.html">Product A</a>
+        <a href="agi-productb.html">Product B</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <a href="agi-technology.html">Technology</a>
+        <a href="agi-industries.html">Industries</a>
+        <a href="agi-agilabs.html">AGI Labs</a>
+        <a href="agi-learninghub.html">Learning Hub</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="agi-aboutus.html">About Us</a>
+        <a href="agi-careers.html">Careers</a>
+        <a href="agi-leadership.html">Leadership</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <p>123 Market Street, Suite 400<br>San Francisco, CA 94105</p>
+        <a href="mailto:hello@agi.com">hello@agi.com</a>
+        <a href="agi-contactus.html">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AGI. All rights reserved.</span>
+      <div class="footer-powered">
+        <span>Powered by</span>
+        <img src="Images/MOJO-Logo-1.png" alt="MOJO">
+      </div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var pills = document.querySelectorAll('.filter-pill');
+  var cards = document.querySelectorAll('.lh-card');
+  if (!pills.length || !cards.length) return;
+
+  pills.forEach(function (pill) {
+    pill.addEventListener('click', function () {
+      pills.forEach(function (p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      var filter = pill.getAttribute('data-filter');
+      cards.forEach(function (card) {
+        var show = filter === 'all' || card.getAttribute('data-category') === filter;
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

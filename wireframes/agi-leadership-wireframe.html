@@ -1,0 +1,335 @@
+<meta charset="utf-8">
+<title>AGI — Leadership Wireframe</title>
+<style>
+  :root {
+    --bg: #edeeef;
+    --paper: #fbfbfb;
+    --panel: #e2e3e5;
+    --panel-strong: #cfd0d3;
+    --border: #c2c3c7;
+    --border-strong: #96979c;
+    --text: #202124;
+    --text-muted: #6d6e73;
+    --accent: #1b1c1f;
+    --accent-ink: #ffffff;
+    --accent-soft: #dcdddf;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--text);
+    font-family: var(--font-sans);
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---- nav ---- */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px clamp(20px, 5vw, 72px);
+    border-bottom: 1px solid var(--border);
+    gap: 20px;
+  }
+  .logo {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+    padding: 4px 9px;
+    display: inline-block;
+  }
+  .nav-links {
+    display: flex;
+    gap: 22px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+  .nav-links .active { color: var(--text); font-weight: 600; position: relative; }
+  .nav-links .active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -15px;
+    height: 2px;
+    background: var(--accent);
+  }
+  .navbar-cta { display: flex; align-items: center; gap: 16px; flex: none; }
+  .link-quiet { font-size: 0.78rem; color: var(--text-muted); }
+
+  .btn {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--accent);
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .btn-solid { background: var(--accent); color: var(--accent-ink); }
+  .btn-outline { background: transparent; color: var(--accent); }
+
+  /* ---- sections ---- */
+  .wf-section {
+    padding: 56px clamp(20px, 5vw, 72px);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .wf-section:last-of-type { border-bottom: none; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    border-left: 2px solid var(--accent);
+    padding-left: 8px;
+    margin-bottom: 18px;
+  }
+
+  /* breadcrumb */
+  .breadcrumb { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 14px; }
+  .breadcrumb a { color: var(--text-muted); font-weight: 600; }
+  .breadcrumb a:hover { color: var(--text); }
+
+  /* placeholder text */
+  .lorem { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; margin: 0; }
+  .lorem + .lorem { margin-top: 10px; }
+  .lorem.lg { font-size: 1.05rem; color: var(--text); }
+
+  h2.real {
+    font-size: 1.4rem;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  /* hero */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .hero-title { font-size: 2.1rem; line-height: 1.15; margin: 0 0 20px; text-wrap: balance; }
+  .hero-copy .lorem { max-width: 46ch; }
+  .hero-actions { display: flex; gap: 12px; margin-top: 24px; }
+
+  .media-box {
+    border: 1px dashed var(--border-strong);
+    border-radius: 8px;
+    background: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--border-strong);
+    aspect-ratio: 4 / 3;
+  }
+  .media-box svg { width: 30%; height: 30%; }
+
+  /* body copy */
+  .body-copy { max-width: 640px; }
+
+  /* card grids */
+  .card-grid { display: grid; gap: 20px; margin-top: 22px; }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    background: var(--paper);
+  }
+  .card .icon-box {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+
+  /* team */
+  .team-card { text-align: center; }
+  .team-card .icon-box { width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 14px; }
+  .team-card .lorem.name { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .team-card .lorem.role { font-size: 0.78rem; }
+
+  /* CTA banner */
+  .cta-section { text-align: center; background: var(--accent); color: var(--accent-ink); }
+  .cta-section h2.real { color: var(--accent-ink); }
+  .cta-section .tag { color: var(--accent-ink); border-left-color: var(--accent-ink); }
+  .cta-section .lorem { color: rgba(255, 255, 255, 0.65); margin: 0 auto 26px; max-width: 40ch; }
+  .cta-actions { display: flex; justify-content: center; gap: 12px; }
+  .cta-section .btn-solid { background: var(--accent-ink); color: var(--accent); border-color: var(--accent-ink); }
+
+  /* footer */
+  footer {
+    padding: 40px clamp(20px, 5vw, 72px) 24px;
+    background: var(--paper);
+  }
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  .footer-col-title { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 12px; }
+  .footer-col .lorem { font-size: 0.8rem; margin-bottom: 8px; }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-brand { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+  .footer-links { display: flex; gap: 18px; font-size: 0.72rem; color: var(--text-muted); }
+
+</style>
+
+<nav class="navbar">
+  <a class="logo" href="agi-homepage-wireframe.html">AGI</a>
+  <div class="nav-links">
+    <a href="agi-homepage-wireframe.html">Home</a>
+    <a href="agi-technology-wireframe.html">Technology</a>
+    <a href="agi-products-wireframe.html">Products</a>
+    <a href="agi-industries-wireframe.html">Industries</a>
+    <a href="agi-agilabs-wireframe.html">AGI Labs</a>
+    <a href="agi-learninghub-wireframe.html">Learning Hub</a>
+    <a href="agi-company-wireframe.html" class="active">Company</a>
+  </div>
+  <div class="navbar-cta">
+    <a href="agi-bookademo-wireframe.html" class="btn btn-solid">Contact Us</a>
+  </div>
+</nav>
+
+<!-- 01 Hero -->
+<section class="wf-section">
+  <div class="tag">01 — Hero</div>
+  <div class="breadcrumb"><a href="agi-company-wireframe.html">Company</a> / Leadership</div>
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Company</div>
+      <h1 class="hero-title">Leadership</h1>
+      <p class="lorem lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+      <div class="hero-actions">
+        <a href="agi-bookademo-wireframe.html" class="btn btn-solid">Contact Us</a>
+      </div>
+    </div>
+    <div class="media-box" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M2 19l6-6.5 4 4 5-6.5 5 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- 02 Executive Team -->
+<section class="wf-section">
+  <div class="tag">02 — Executive Team</div>
+  <h2 class="real">Executive Team</h2>
+  <div class="card-grid cols-4">
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Lorem Ipsum</p>
+      <p class="lorem role">Dolor Sit Amet</p>
+    </div>
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Consectetur Elit</p>
+      <p class="lorem role">Sed Do Eiusmod</p>
+    </div>
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Tempor Incididunt</p>
+      <p class="lorem role">Ut Labore Dolore</p>
+    </div>
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Magna Aliqua</p>
+      <p class="lorem role">Enim Ad Minim</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Board of Advisors -->
+<section class="wf-section">
+  <div class="tag">03 — Board of Advisors</div>
+  <h2 class="real">Board of Advisors</h2>
+  <div class="card-grid cols-3">
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Veniam Quis</p>
+      <p class="lorem role">Nostrud Exercitation</p>
+    </div>
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Ullamco Laboris</p>
+      <p class="lorem role">Nisi Ut Aliquip</p>
+    </div>
+    <div class="card team-card">
+      <div class="icon-box"></div>
+      <p class="lorem name">Ea Commodo</p>
+      <p class="lorem role">Consequat Duis</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 Contact Us CTA -->
+<section class="wf-section cta-section">
+  <div class="tag" style="display:inline-block;">04 — Contact Us (CTA)</div>
+  <h2 class="real">Lorem ipsum dolor sit amet consectetur adipiscing elit.</h2>
+  <p class="lorem">Sed do eiusmod tempor incididunt ut labore et dolore.</p>
+  <div class="cta-actions">
+    <a href="agi-bookademo-wireframe.html" class="btn btn-solid">Contact Us</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <div class="footer-col-title">Products</div>
+      <p class="lorem">Lorem Ipsum</p>
+      <p class="lorem">Dolor Sit Amet</p>
+      <p class="lorem">Consectetur</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Technology</div>
+      <p class="lorem">Lorem Ipsum</p>
+      <p class="lorem">Dolor Sit Amet</p>
+      <p class="lorem">Consectetur</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Resources</div>
+      <p class="lorem">Lorem Ipsum</p>
+      <p class="lorem">Dolor Sit Amet</p>
+      <p class="lorem">Consectetur</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Company</div>
+      <p class="lorem">Lorem Ipsum</p>
+      <p class="lorem">Dolor Sit Amet</p>
+      <p class="lorem">Consectetur</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-brand">MOJO — AGI</div>
+    <div class="footer-links">
+      <span>Privacy Policy</span>
+      <span>Terms &amp; Conditions</span>
+    </div>
+  </div>
+</footer>

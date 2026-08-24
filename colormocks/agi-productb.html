@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGI — Product B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --container: 1264px;
+
+    --bg: #000000;
+    --bg-alt: #0a0a0a;
+    --surface: #121212;
+    --surface-2: #1a1a1a;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+
+    --text: #f2f2f4;
+    --text-muted: #a1a1a8;
+    --text-faint: #6f6f78;
+
+    --purple: #7a00c6;
+    --purple-soft: rgba(122,0,198,0.16);
+    --orange: #f97316;
+    --orange-soft: rgba(249,115,22,0.16);
+    --yellow: #f9d67a;
+    --sage: #a2cca8;
+    --cyan: #23ced8;
+    --teal: #097c87;
+
+    --gradient-main: linear-gradient(90deg, #7a00c6 0%, #f97316 100%);
+    --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  p { margin: 0; }
+
+  ::selection { background: var(--purple); color: #fff; }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    .hero-glow { animation: none !important; }
+    .cta-band::before, .cta-band::after { animation: none !important; }
+    .page-hero-badge, .page-hero h1, .page-hero-sub, .page-hero-actions, .page-hero-visual { animation: none !important; opacity: 1 !important; transform: none !important; filter: none !important; }
+  }
+
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroBlurIn {
+    from { opacity: 0; filter: blur(14px); }
+    to   { opacity: 1; filter: blur(0px); }
+  }
+  .page-hero-badge { animation: heroFadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+  .page-hero h1 { animation: heroBlurIn 2.2s cubic-bezier(0.16,1,0.3,1) 0.14s both; }
+  .page-hero-sub { animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+  .page-hero-actions { animation: heroFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+  .page-hero-visual { animation: heroBlurIn 1.1s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
+
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  @media (max-width: 640px) {
+    .container { padding: 0 20px; }
+  }
+
+  /* ---------- type helpers ---------- */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex: none;
+  }
+  .section-heading {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+    max-width: 640px;
+  }
+  .section-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0;
+  }
+  .section-head {
+    margin-bottom: 48px;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 13px 26px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 12px 30px -10px rgba(122,0,198,0.55);
+  }
+  .btn-primary:hover { background: #8f0de0; box-shadow: 0 16px 36px -8px rgba(122,0,198,0.6); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.02);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); }
+  .btn-light {
+    background: #fff;
+    color: #000000;
+  }
+  .btn-light:hover { box-shadow: 0 14px 34px -10px rgba(0,0,0,0.4); }
+  .btn-sm { padding: 9px 18px; font-size: 0.82rem; }
+
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .link-arrow svg { width: 15px; height: 15px; transition: transform 0.15s ease; }
+  .link-arrow:hover svg { transform: translateX(3px); }
+
+  /* ---------- nav ---------- */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+    gap: 24px;
+    max-width: none;
+    padding: 0 40px;
+  }
+  @media (max-width: 640px) {
+    .navbar .container { padding: 0 20px; }
+  }
+  .navbar .logo img { height: 38px; width: auto; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+  }
+  .nav-links a { transition: color 0.15s ease; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+  .nav-item { position: relative; }
+  .nav-item > a { display: inline-flex; align-items: center; gap: 4px; }
+  .nav-caret { width: 11px; height: 11px; flex: none; transition: transform 0.15s ease; }
+  .nav-item:hover .nav-caret, .nav-item:focus-within .nav-caret { transform: rotate(180deg); }
+  .nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 8px;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transform-origin: top center;
+    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+  }
+  .nav-dropdown a {
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+  .nav-dropdown a:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+  .nav-item:hover .nav-dropdown, .nav-item:focus-within .nav-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-dropdown, .nav-caret { transition: none !important; }
+  }
+  .nav-right { display: flex; align-items: center; gap: 18px; flex: none; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---------- section rhythm ---------- */
+  .section { padding: 108px 0; position: relative; }
+  .section.alt { background: var(--bg-alt); }
+  @media (max-width: 640px) {
+    .section { padding: 72px 0; }
+  }
+
+  /* ---------- challenge statement ---------- */
+  .challenge-section {
+    background: var(--bg);
+    padding: 160px 0;
+    overflow: hidden;
+  }
+  .challenge-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: url('Images/Grid-1.svg');
+    background-size: 140%;
+    background-position: center top;
+    background-repeat: no-repeat;
+    opacity: 0.2;
+    -webkit-mask-image: radial-gradient(ellipse 70% 75% at 50% 50%, black 0%, transparent 82%);
+    mask-image: radial-gradient(ellipse 70% 75% at 50% 50%, black 0%, transparent 82%);
+    pointer-events: none;
+  }
+  .challenge-section .container { position: relative; z-index: 1; }
+  .challenge-section .eyebrow { max-width: 980px; margin: 0 auto 16px; }
+  .challenge-statement {
+    font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    max-width: 980px;
+    margin: 0 auto 44px;
+    color: var(--text-faint);
+  }
+  .challenge-statement .word { color: inherit; transition: color 0.3s ease; }
+  .challenge-statement .word.lit { color: var(--text); }
+  @media (prefers-reduced-motion: reduce) {
+    .challenge-statement .word { transition: none; }
+  }
+  .challenge-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; max-width: 980px; margin: 0 auto; }
+
+  /* ---------- technology showcase (Centralize-style split panels) ---------- */
+  .tech-showcase-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .tech-showcase-grid.reverse { grid-template-columns: 1.15fr 0.85fr; }
+  .tech-showcase-grid.reverse .tech-showcase-visual { order: -1; }
+  @media (max-width: 900px) {
+    .tech-showcase-grid, .tech-showcase-grid.reverse { grid-template-columns: 1fr; gap: 40px; }
+    .tech-showcase-grid .tech-showcase-copy,
+    .tech-showcase-grid.reverse .tech-showcase-copy { order: 1; }
+    .tech-showcase-grid .tech-showcase-visual,
+    .tech-showcase-grid.reverse .tech-showcase-visual { order: 2; }
+  }
+  .tech-showcase-heading {
+    font-size: clamp(2.3rem, 4.2vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin: 0 0 20px;
+  }
+  .tech-showcase-desc {
+    font-size: 1.25rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 0 30px;
+  }
+  .tech-showcase-visual {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    min-height: 340px;
+  }
+  .tech-showcase-visual svg { width: 15%; height: 15%; opacity: 0.8; }
+
+  /* ---------- problem grid ---------- */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 64px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .problem-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .problem-list { display: flex; flex-direction: column; }
+  .problem-row {
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+  }
+  .problem-row:first-child { border-top: none; padding-top: 0; }
+  .problem-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .problem-icon {
+    flex: none;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .problem-icon svg { width: 16px; height: 16px; }
+  .problem-row h3 { font-size: 1.1rem; font-weight: 600; margin: 0; }
+  .problem-row p { font-size: 1rem; line-height: 1.7; color: var(--text-muted); margin: 0; }
+
+  /* ---------- breadcrumb ---------- */
+  .breadcrumb {
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+  }
+  .breadcrumb a { color: var(--text-muted); transition: color 0.15s ease; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb .sep { margin: 0 6px; color: var(--text-faint); }
+
+  /* ---------- page hero (product detail) ---------- */
+  .page-hero {
+    padding: 176px 0 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: url('Images/Grid-1.svg');
+    background-size: 180%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    -webkit-mask-image: radial-gradient(ellipse 60% 55% at 50% 20%, black 0%, transparent 75%);
+    mask-image: radial-gradient(ellipse 60% 55% at 50% 20%, black 0%, transparent 75%);
+    pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -220px; left: 0; right: 0;
+    width: 100%; height: 700px;
+    background:
+      radial-gradient(circle at 14% 30%, rgba(249,115,22,0.5), transparent 60%),
+      radial-gradient(circle at 78% 40%, rgba(122,0,198,0.5), transparent 56%);
+    -webkit-mask-image: radial-gradient(ellipse 65% 58% at 50% 28%, black 0%, black 38%, transparent 88%);
+    mask-image: radial-gradient(ellipse 65% 58% at 50% 28%, black 0%, black 38%, transparent 88%);
+    filter: blur(24px);
+    pointer-events: none;
+    animation: heroGlowDrift 9s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes heroGlowDrift {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.65; }
+    25%  { transform: translate3d(9%, -11%, 0) scale(1.32) rotate(5deg); opacity: 1; }
+    50%  { transform: translate3d(-8%, 4%, 0) scale(1.08) rotate(-4deg); opacity: 0.8; }
+    75%  { transform: translate3d(7%, 9%, 0) scale(1.38) rotate(4deg); opacity: 1; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.65; }
+  }
+  .page-hero-inner { position: relative; z-index: 1; }
+  .page-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-strong);
+    padding: 7px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .page-hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gradient-main); }
+  .page-hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .page-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .page-hero h1 {
+    font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  .page-hero-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 0 34px;
+  }
+  .page-hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+  /* ---------- hero visual placeholder ---------- */
+  .page-hero-visual {
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    box-shadow: 0 30px 80px -30px rgba(122,0,198,0.3);
+  }
+  .page-hero-visual svg { width: 15%; height: 15%; opacity: 0.8; }
+
+  /* ---------- code block (compiled logic) ---------- */
+  .code-block {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+  }
+  .code-block .c1 { color: var(--cyan); }
+  .code-block .c2 { color: var(--orange); }
+  .code-block .c3 { color: var(--sage); }
+  .code-block .c4 { color: var(--text-faint); }
+
+  /* ---------- body copy sections ---------- */
+  .body-copy { max-width: 640px; }
+  .body-copy p { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); }
+
+  /* ---------- feature / security cards ---------- */
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 8px; }
+  @media (max-width: 860px) { .feature-grid { grid-template-columns: 1fr; } }
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .feature-card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .feature-icon {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px;
+  }
+  .feature-icon svg { width: 22px; height: 22px; }
+  .feature-icon.f1 { background: rgba(122,0,198,0.2); color: #c583f2; }
+  .feature-icon.f2 { background: rgba(249,115,22,0.18); color: var(--orange); }
+  .feature-icon.f3 { background: rgba(35,206,216,0.16); color: var(--cyan); }
+  .feature-icon.f4 { background: rgba(249,214,122,0.18); color: var(--yellow); }
+  .feature-icon.f5 { background: rgba(162,204,168,0.18); color: var(--sage); }
+  .feature-icon.f6 { background: rgba(9,124,135,0.22); color: var(--teal); }
+  .feature-card h4 { font-size: 1.08rem; font-weight: 600; margin: 0 0 10px; }
+  .feature-card p { font-size: 0.94rem; line-height: 1.7; color: var(--text-muted); margin: 0; }
+
+  /* ---------- category tiles (integrations / deployment) ---------- */
+  .tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 8px; }
+  .tile-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 860px) { .tile-grid, .tile-grid.cols-3 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .tile-grid, .tile-grid.cols-3 { grid-template-columns: 1fr; } }
+  .category-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px 20px;
+    text-align: center;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .category-tile:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .category-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .category-icon svg { width: 18px; height: 18px; color: var(--text-muted); }
+  .category-tile .name { font-size: 0.86rem; font-weight: 600; color: var(--text); }
+
+  /* ---------- architecture diagram ---------- */
+  .arch-visual {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 40px;
+  }
+  .flow-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .flow-row:last-child { margin-bottom: 0; }
+  .flow-chip {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    text-align: center;
+  }
+  .flow-chip.strong { color: var(--text); border-color: var(--border-strong); }
+  .flow-arrow { flex: none; color: var(--text-faint); }
+  .arch-visual .code-block { margin-top: 14px; }
+
+  /* ---------- example workflows pipeline ---------- */
+  .pipeline { display: flex; align-items: flex-start; gap: 6px; margin-top: 40px; }
+  @media (max-width: 760px) { .pipeline { flex-direction: column; } }
+  .pipeline-step {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 16px;
+    text-align: center;
+  }
+  @media (max-width: 760px) { .pipeline-step { width: 100%; } }
+  .pipeline-step .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--gradient-main);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem; font-weight: 700;
+    margin: 0 auto 14px;
+  }
+  .pipeline-step p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+  .pipeline-connector {
+    flex: none;
+    width: 28px;
+    margin-top: 30px;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 760px) {
+    .pipeline-connector { width: 100%; margin-top: 0; transform: rotate(90deg); padding: 6px 0; }
+  }
+  .pipeline-connector svg { width: 18px; height: 18px; }
+
+  /* ---------- CTA band ---------- */
+  .cta-band {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    background: linear-gradient(150deg, #1f0834 0%, #090309 38%, #000000 58%, #12070a 76%, #2f1006 100%);
+  }
+  .cta-band::before,
+  .cta-band::after {
+    content: "";
+    position: absolute; inset: -25%;
+    pointer-events: none;
+    filter: blur(36px);
+  }
+  .cta-band::before {
+    background: radial-gradient(circle at 22% 25%, rgba(122,0,198,0.68), transparent 56%),
+                radial-gradient(circle at 60% 8%, rgba(0,0,0,0.7), transparent 46%),
+                radial-gradient(circle at 82% 70%, rgba(249,115,22,0.42), transparent 52%);
+    animation: meshDriftA 10s ease-in-out infinite;
+    transform-origin: 30% 30%;
+  }
+  .cta-band::after {
+    background: radial-gradient(circle at 78% 78%, rgba(249,115,22,0.55), transparent 55%),
+                radial-gradient(circle at 30% 92%, rgba(0,0,0,0.65), transparent 48%),
+                radial-gradient(circle at 12% 45%, rgba(122,0,198,0.35), transparent 50%);
+    animation: meshDriftB 14s ease-in-out infinite;
+    transform-origin: 70% 70%;
+  }
+  @keyframes meshDriftA {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.8; }
+    33%  { transform: translate3d(10%, -9%, 0) scale(1.3) rotate(8deg); opacity: 1; }
+    66%  { transform: translate3d(-8%, 7%, 0) scale(0.92) rotate(-6deg); opacity: 0.85; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.8; }
+  }
+  @keyframes meshDriftB {
+    0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.85; }
+    40%  { transform: translate3d(-9%, 9%, 0) scale(1.28) rotate(-7deg); opacity: 1; }
+    70%  { transform: translate3d(9%, -6%, 0) scale(1.05) rotate(5deg); opacity: 0.9; }
+    100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); opacity: 0.85; }
+  }
+  .cta-band .container { position: relative; z-index: 1; }
+  .cta-band h2 {
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 18px;
+    max-width: 620px;
+    margin-left: auto; margin-right: auto;
+    text-wrap: balance;
+  }
+  .cta-band p {
+    font-size: 1.05rem;
+    color: rgba(245,242,249,0.75);
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  /* ---------- footer ---------- */
+  footer {
+    padding: 72px 0 32px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 32px;
+    padding-bottom: 48px;
+  }
+  @media (max-width: 860px) {
+    .footer-top { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .footer-top { grid-template-columns: 1fr; }
+  }
+  .footer-brand img { height: 32px; margin-bottom: 16px; }
+  .footer-brand p { font-size: 0.88rem; color: var(--text-faint); max-width: 240px; line-height: 1.6; }
+  .footer-social {
+    display: inline-flex;
+    margin-top: 18px;
+  }
+  .footer-social img {
+    width: 22px;
+    height: 22px;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+  }
+  .footer-social:hover img { opacity: 1; }
+  .footer-col-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 18px;
+  }
+  .footer-col p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 13px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 13px;
+    transition: color 0.15s ease;
+  }
+  .footer-col a:hover { color: var(--cyan); }
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-faint);
+  }
+  .footer-legal { display: flex; gap: 22px; }
+  .footer-legal a { color: var(--text-muted); }
+  .footer-legal a:hover { color: var(--text); }
+  .footer-powered {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-faint);
+  }
+  .footer-powered span { position: relative; top: -1px; }
+  .footer-powered img { height: 16px; width: auto; opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="logo" href="agi-homepage.html"><img src="Images/AGI-Logo-1.svg" alt="AGI"></a>
+    <div class="nav-links">
+      <a href="agi-homepage.html">Home</a>
+      <div class="nav-item">
+      <a href="agi-technology.html">Technology <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-technology-overview.html">Technology Overview</a>
+      <a href="agi-lcm.html">Language Compiler Model</a>
+      </div>
+    </div>
+      <div class="nav-item">
+      <a href="agi-products.html" class="active">Products <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-producta.html">Product A</a>
+      <a href="agi-productb.html">Product B</a>
+      </div>
+    </div>
+      <a href="agi-industries.html">Industries</a>
+      <a href="agi-agilabs.html">AGI Labs</a>
+      <a href="agi-learninghub.html">Learning Hub</a>
+      <div class="nav-item">
+      <a href="agi-company.html">Company <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <div class="nav-dropdown">
+        <a href="agi-aboutus.html">About Us</a>
+      <a href="agi-careers.html">Careers</a>
+      <a href="agi-leadership.html">Leadership</a>
+      </div>
+    </div>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-primary btn-sm" href="agi-bookademo.html">Contact Us</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 01 Hero -->
+<section class="page-hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container page-hero-inner">
+    <div class="page-hero-grid">
+      <div class="page-hero-copy">
+        <div class="breadcrumb"><a href="agi-products.html">Products</a><span class="sep">/</span>Product B</div>
+        <div class="page-hero-badge"><span class="dot"></span> Products</div>
+        <h1>Product B</h1>
+        <p class="page-hero-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+        <div class="page-hero-actions">
+          <a class="btn btn-primary" href="agi-bookademo.html">Contact Us</a>
+        </div>
+      </div>
+      <div class="page-hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M2 19l6-6.5 4 4 5-6.5 5 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 Overview -->
+<section class="section challenge-section">
+  <div class="challenge-bg-grid"></div>
+  <div class="container">
+    <div class="eyebrow">Overview</div>
+    <p class="challenge-statement"><span class="word">What</span> <span class="word">is</span> <span class="word">Product</span> <span class="word">B?</span> <span class="word">Lorem</span> <span class="word">ipsum</span> <span class="word">dolor</span> <span class="word">sit</span> <span class="word">amet,</span> <span class="word">consectetur</span> <span class="word">adipiscing</span> <span class="word">elit,</span> <span class="word">sed</span> <span class="word">do</span> <span class="word">eiusmod</span> <span class="word">tempor</span> <span class="word">incididunt</span> <span class="word">ut</span> <span class="word">labore</span> <span class="word">et</span> <span class="word">dolore</span> <span class="word">magna</span> <span class="word">aliqua.</span> <span class="word">Ut</span> <span class="word">enim</span> <span class="word">ad</span> <span class="word">minim</span> <span class="word">veniam,</span> <span class="word">quis</span> <span class="word">nostrud</span> <span class="word">exercitation</span> <span class="word">ullamco</span> <span class="word">laboris</span> <span class="word">nisi</span> <span class="word">ut</span> <span class="word">aliquip</span> <span class="word">ex</span> <span class="word">ea</span> <span class="word">commodo</span> <span class="word">consequat.</span></p>
+    <div class="challenge-actions">
+      <a class="btn btn-light" href="agi-bookademo.html">Request a Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- 03 Enterprise AI Orchestration -->
+<section class="section">
+  <div class="container">
+    <div class="tech-showcase-grid reverse">
+      <div class="tech-showcase-copy">
+        <div class="eyebrow">What is Enterprise AI Orchestration?</div>
+        <h2 class="tech-showcase-heading">Enterprise AI Orchestration</h2>
+        <p class="tech-showcase-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+        <a class="btn btn-primary" href="agi-bookademo.html">Request a Demo</a>
+      </div>
+      <div class="tech-showcase-visual" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M2 19l6-6.5 4 4 5-6.5 5 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 Capabilities -->
+<section class="section" id="capabilities">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-heading">Capabilities</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon f1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 15L15 9M8.5 8.5l-2 2a3 3 0 0 0 4 4.5M15.5 15.5l2-2a3 3 0 0 0-4-4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h4>Lorem ipsum dolor</h4>
+        <p>Sit amet consectetur adipiscing elit sed do eiusmod.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="6" rx="1.5"/><rect x="4" y="14" width="16" height="6" rx="1.5"/><path d="M8 7h.01M8 17h.01" stroke-linecap="round"/></svg></div>
+        <h4>Tempor incididunt</h4>
+        <p>Ut labore et dolore magna aliqua ut enim.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h4>Ad minim veniam</h4>
+        <p>Quis nostrud exercitation ullamco laboris nisi.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>
+        <h4>Ut aliquip ex ea</h4>
+        <p>Commodo consequat duis aute irure dolor.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>
+        <h4>Reprehenderit in voluptate</h4>
+        <p>Velit esse cillum dolore eu fugiat nulla.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>
+        <h4>Pariatur excepteur sint</h4>
+        <p>Occaecat cupidatat non proident sunt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Architecture -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-heading">Architecture</h2>
+    </div>
+    <div class="body-copy">
+      <p>Ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.</p>
+    </div>
+    <div class="arch-visual">
+      <div class="flow-row">
+        <div class="flow-chip">Natural language intent</div>
+        <div class="flow-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="flow-chip">Semantic parser</div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-chip" style="flex:none; width:100%;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline; vertical-align:-3px; margin-right:8px; color:var(--cyan);"><path d="M12 4v16M4 12h16" stroke-linecap="round"/></svg>
+          Compiler &amp; verification layer
+        </div>
+      </div>
+      <div class="flow-row">
+        <div class="flow-chip strong">Deterministic rule set</div>
+        <div class="flow-arrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="flow-chip strong">Runtime execution</div>
+      </div>
+      <div class="code-block">
+        <div><span class="c4">// verified, deterministic output</span></div>
+        <div><span class="c2">rule</span> <span class="c3">LatePayment90</span> {</div>
+        <div>&nbsp;&nbsp;<span class="c1">where</span> days_overdue <span class="c2">&gt;</span> 90</div>
+        <div>&nbsp;&nbsp;<span class="c1">source</span>: verified_ledger</div>
+        <div>&nbsp;&nbsp;<span class="c1">confidence</span>: 1.0</div>
+        <div>}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 Integrations -->
+<section class="section">
+  <div class="container">
+    <div class="problem-grid">
+      <div class="problem-copy">
+        <div class="eyebrow">Integrations</div>
+        <h2 class="section-heading">Integrations</h2>
+        <p class="section-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      </div>
+      <div class="problem-list">
+        <div class="problem-row">
+          <div class="problem-head">
+            <span class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></span>
+            <h3>Lorem Ipsum</h3>
+          </div>
+          <p>Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+        </div>
+        <div class="problem-row">
+          <div class="problem-head">
+            <span class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/></svg></span>
+            <h3>Dolor Sit Amet</h3>
+          </div>
+          <p>Ut labore et dolore magna aliqua ut enim ad minim veniam.</p>
+        </div>
+        <div class="problem-row">
+          <div class="problem-head">
+            <span class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16M12 4v16" stroke-linecap="round"/></svg></span>
+            <h3>Consectetur</h3>
+          </div>
+          <p>Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.</p>
+        </div>
+        <div class="problem-row">
+          <div class="problem-head">
+            <span class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round"/></svg></span>
+            <h3>Adipiscing Elit</h3>
+          </div>
+          <p>Commodo consequat duis aute irure dolor in reprehenderit.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 Example Workflows -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-heading">Example Workflows</h2>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-num">1</div>
+        <p>Lorem ipsum</p>
+      </div>
+      <div class="pipeline-connector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">2</div>
+        <p>Dolor sit amet</p>
+      </div>
+      <div class="pipeline-connector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">3</div>
+        <p>Consectetur adipiscing</p>
+      </div>
+      <div class="pipeline-connector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">4</div>
+        <p>Sed do eiusmod</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 Security -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-heading">Security</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon f1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-linecap="round"/></svg></div>
+        <h4>Tempor incididunt</h4>
+        <p>Ut labore et dolore magna aliqua ut enim ad minim.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z" stroke-linejoin="round"/></svg></div>
+        <h4>Veniam quis nostrud</h4>
+        <p>Exercitation ullamco laboris nisi ut aliquip ex.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon f3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h4>Ea commodo consequat</h4>
+        <p>Duis aute irure dolor in reprehenderit in voluptate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 Deployment Options -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-heading">Deployment Options</h2>
+    </div>
+    <div class="tile-grid cols-3">
+      <div class="category-tile">
+        <div class="category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>
+        <div class="name">Lorem Ipsum</div>
+      </div>
+      <div class="category-tile">
+        <div class="category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/></svg></div>
+        <div class="name">Dolor Sit Amet</div>
+      </div>
+      <div class="category-tile">
+        <div class="category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16M12 4v16" stroke-linecap="round"/></svg></div>
+        <div class="name">Consectetur</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Contact Us CTA -->
+<section class="section cta-band">
+  <div class="container">
+    <h2>Ready to build on coherence?</h2>
+    <p>Talk to our team about bringing CoherenceFirst Intelligence to your organization.</p>
+    <a class="btn btn-light" href="agi-bookademo.html">Contact Us</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="Images/AGI-Logo-1.svg" alt="AGI">
+        <p>Coherence-first intelligence for the AI economy.</p>
+        <a class="footer-social" href="#" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <img src="Images/LinkedIn-Icon.png" alt="LinkedIn">
+        </a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Products</div>
+        <a href="agi-producta.html">Product A</a>
+        <a href="agi-productb.html">Product B</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <a href="agi-technology.html">Technology</a>
+        <a href="agi-industries.html">Industries</a>
+        <a href="agi-agilabs.html">AGI Labs</a>
+        <a href="agi-learninghub.html">Learning Hub</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="agi-aboutus.html">About Us</a>
+        <a href="agi-careers.html">Careers</a>
+        <a href="agi-leadership.html">Leadership</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <p>123 Market Street, Suite 400<br>San Francisco, CA 94105</p>
+        <a href="mailto:hello@agi.com">hello@agi.com</a>
+        <a href="agi-contactus.html">Contact Us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AGI. All rights reserved.</span>
+      <div class="footer-powered">
+        <span>Powered by</span>
+        <img src="Images/MOJO-Logo-1.png" alt="MOJO">
+      </div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var statement = document.querySelector('.challenge-statement');
+  if (!statement) return;
+  var words = statement.querySelectorAll('.word');
+  if (!words.length) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    words.forEach(function (w) { w.classList.add('lit'); });
+    return;
+  }
+
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var rect = statement.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var progress = (vh * 0.85 - rect.top) / (rect.height * 1.3);
+    progress = Math.max(0, Math.min(1, progress));
+    var lit = Math.round(progress * words.length);
+    words.forEach(function (w, i) {
+      w.classList.toggle('lit', i < lit);
+    });
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+</script>
+</body>
+</html>
